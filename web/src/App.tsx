@@ -1,16 +1,22 @@
-import { useCallback } from 'react'
+import { useRef } from 'react'
 import { useCamera } from './hooks/useCamera'
 import { useFrameCapture } from './hooks/useFrameCapture'
+import { useCardCount } from './hooks/useCardCount'
 import { GuideFrame } from './components/GuideFrame'
+import { DebugOverlay } from './components/DebugOverlay'
 
 function App() {
   const { videoRef, status, errorMessage } = useCamera()
+  const debugCanvasRef = useRef<HTMLCanvasElement>(null)
+  const { cardState, onFrame } = useCardCount(debugCanvasRef)
 
-  const handleFrame = useCallback((_canvas: HTMLCanvasElement) => {
-    // T07 で OpenCV.js による枚数推定に差し替える
-  }, [])
+  const stateLabel: Record<typeof cardState, string> = {
+    none: 'カードなし',
+    single: '1枚',
+    multiple: '複数枚',
+  }
 
-  useFrameCapture(videoRef, status === 'active', handleFrame)
+  useFrameCapture(videoRef, status === 'active', onFrame)
 
   return (
     <div className="relative min-h-screen bg-black text-white flex flex-col items-center justify-center overflow-hidden">
@@ -26,6 +32,9 @@ function App() {
       {/* 手札ガイド枠 */}
       {status === 'active' && <GuideFrame />}
 
+      {/* デバッグオーバーレイ */}
+      {status === 'active' && <DebugOverlay ref={debugCanvasRef} />}
+
       {/* エラー表示 */}
       {(status === 'denied' || status === 'error') && (
         <div className="relative z-10 bg-red-600 text-white text-center px-6 py-4 rounded-xl mx-4">
@@ -38,6 +47,15 @@ function App() {
       {status === 'requesting' && (
         <div className="relative z-10 text-white text-center">
           <p className="text-lg">カメラを起動中...</p>
+        </div>
+      )}
+
+      {/* カード状態表示 */}
+      {status === 'active' && (
+        <div className="absolute top-4 left-0 right-0 z-10 text-center">
+          <span className="bg-black/60 text-white text-sm px-4 py-1 rounded-full">
+            手札: {stateLabel[cardState]}
+          </span>
         </div>
       )}
     </div>

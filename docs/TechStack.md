@@ -7,7 +7,7 @@
 | フレームワーク | React 19 + Vite | SPA構成 |
 | 言語 | TypeScript | strict モード |
 | スタイリング | Tailwind CSS v4 | `@tailwindcss/vite` プラグイン経由 |
-| 画像処理 | OpenCV.js | カード輪郭検出による枚数推定 |
+| 画像処理 | Canvas API（標準） | RGB→HSV変換 + UNO色相フィルタ（赤・青・緑・黄） + 白枠隣接チェック（積分画像）による `none/single/multiple` 判定。依存なし。 |
 | BLE通信 | Web Bluetooth API | ブラウザ標準API（Chrome for Android必須） |
 | デプロイ | Vercel | HTTPS自動付与・静的ホスティング |
 
