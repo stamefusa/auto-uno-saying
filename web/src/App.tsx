@@ -1,10 +1,11 @@
 import { useCamera } from './hooks/useCamera'
+import { GuideFrame } from './components/GuideFrame'
 
 function App() {
   const { videoRef, status, errorMessage } = useCamera()
 
   return (
-    <div className="relative min-h-screen bg-black text-white flex flex-col items-center justify-center">
+    <div className="relative min-h-screen bg-black text-white flex flex-col items-center justify-center overflow-hidden">
       {/* カメラプレビュー */}
       <video
         ref={videoRef}
@@ -13,6 +14,9 @@ function App() {
         muted
         className="w-full h-full object-cover absolute inset-0"
       />
+
+      {/* 手札ガイド枠 */}
+      {status === 'active' && <GuideFrame />}
 
       {/* エラー表示 */}
       {(status === 'denied' || status === 'error') && (
