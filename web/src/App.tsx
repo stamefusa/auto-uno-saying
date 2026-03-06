@@ -1,8 +1,16 @@
+import { useCallback } from 'react'
 import { useCamera } from './hooks/useCamera'
+import { useFrameCapture } from './hooks/useFrameCapture'
 import { GuideFrame } from './components/GuideFrame'
 
 function App() {
   const { videoRef, status, errorMessage } = useCamera()
+
+  const handleFrame = useCallback((_canvas: HTMLCanvasElement) => {
+    // T07 で OpenCV.js による枚数推定に差し替える
+  }, [])
+
+  useFrameCapture(videoRef, status === 'active', handleFrame)
 
   return (
     <div className="relative min-h-screen bg-black text-white flex flex-col items-center justify-center overflow-hidden">
