@@ -3,6 +3,7 @@ import { useCamera } from '../hooks/useCamera'
 import { useFrameCapture } from '../hooks/useFrameCapture'
 import { useCardCount } from '../hooks/useCardCount'
 import { useUnoDetect } from '../hooks/useUnoDetect'
+import { useUnoAudio } from '../hooks/useUnoAudio'
 import { GuideFrame } from '../components/GuideFrame'
 import { ModeSelect } from '../components/ModeSelect'
 import type { UnoMode } from '../types/mode'
@@ -16,8 +17,12 @@ function CameraView({ mode, onBack }: CameraViewProps) {
   const [unoVisible, setUnoVisible] = useState(false)
 
   const { videoRef, status, errorMessage } = useCamera()
+  const playAudio = useUnoAudio(mode)
 
-  const handleUno = useCallback(() => setUnoVisible(true), [])
+  const handleUno = useCallback(() => {
+    setUnoVisible(true)
+    playAudio()
+  }, [playAudio])
   const check = useUnoDetect(handleUno)
   const { onFrame } = useCardCount(check)
 
