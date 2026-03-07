@@ -19,11 +19,10 @@ function CameraView({ mode, onBack }: CameraViewProps) {
   const { videoRef, status, errorMessage } = useCamera()
   const playAudio = useUnoAudio(mode)
 
-  const handleUno = useCallback(() => {
+  const { check, reset } = useUnoDetect(useCallback(() => {
     setUnoVisible(true)
     playAudio()
-  }, [playAudio])
-  const check = useUnoDetect(handleUno)
+  }, [playAudio]))
   const { onFrame } = useCardCount(check)
 
   useFrameCapture(videoRef, status === 'active', onFrame)
@@ -75,7 +74,7 @@ function CameraView({ mode, onBack }: CameraViewProps) {
       {unoVisible && mode === 'normal' && (
         <div
           className="absolute inset-0 z-20 flex items-center justify-center cursor-pointer bg-black/50"
-          onClick={() => setUnoVisible(false)}
+          onClick={() => { setUnoVisible(false); reset() }}
         >
           <span
             className="text-white font-black select-none animate-uno-appear"

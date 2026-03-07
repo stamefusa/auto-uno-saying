@@ -12,8 +12,9 @@ const REQUIRED_CONSECUTIVE_FRAMES = 3
  *
  * - `multiple → single` の遷移をトリガーに連続カウント開始
  * - REQUIRED_CONSECUTIVE_FRAMES フレーム連続で single が続いたら onUno を発火
- * - 発火後は single が続いても再発火しない
- * - single 以外になったらカウントとフラグをリセット
+ * - 発火後は single が続いても再発火しない（firedRef は reset() 呼び出しまで維持）
+ * - single 以外になったら連続カウントのみリセット
+ * - reset() でユーザーが明示的に再アームする
  */
 export function useUnoDetect(onUno: () => void) {
   const prevStateRef = useRef<CardState>('none')
@@ -37,12 +38,19 @@ export function useUnoDetect(onUno: () => void) {
         onUnoRef.current()
       }
     } else if (cardState !== 'single') {
+      // 連続カウントはリセットするが、firedRef はユーザーの明示的なリセットまで維持する
       consecutiveRef.current = 0
-      firedRef.current = false
     }
 
     prevStateRef.current = cardState
   }, [])
 
-  return check
+  // ユーザーがUNO表示を消したときに呼び出して検出を再アームする
+  const reset = useCallback(() => {
+    prevStateRef.current = 'none'
+    consecutiveRef.current = 0
+    firedRef.current = false
+  }, [])
+
+  return { check, reset }
 }
