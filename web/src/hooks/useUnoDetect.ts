@@ -25,7 +25,6 @@ export function useUnoDetect(onUno: () => void) {
   const check = useCallback((cardState: CardState) => {
     const prev = prevStateRef.current
 
-    console.log(cardState);
     if (cardState === 'single' && !firedRef.current) {
       if (prev === 'multiple') {
         consecutiveRef.current = 1
