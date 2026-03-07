@@ -25,7 +25,7 @@ export function DebugPage() {
   const [params, setParams] = useState<CardDetectParams>(DEFAULT_PARAMS)
   const { videoRef, status, errorMessage } = useCamera()
   const debugCanvasRef = useRef<HTMLCanvasElement>(null)
-  const { cardState, onFrame } = useCardCount(debugCanvasRef, params)
+  const { cardState, onFrame } = useCardCount(undefined, debugCanvasRef, params)
 
   useFrameCapture(videoRef, status === 'active', onFrame)
 
