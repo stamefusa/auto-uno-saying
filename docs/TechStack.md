@@ -7,8 +7,10 @@
 | フレームワーク | React 19 + Vite | SPA構成 |
 | 言語 | TypeScript | strict モード |
 | スタイリング | Tailwind CSS v4 | `@tailwindcss/vite` プラグイン経由 |
-| 画像処理 | Canvas API（標準） | RGB→HSV変換 + UNO色相フィルタ（赤・青・緑・黄） + 白枠隣接チェック（積分画像）による `none/single/multiple` 判定。依存なし。 |
-| BLE通信 | Web Bluetooth API | ブラウザ標準API（Chrome for Android必須） |
+| ルーティング | react-router-dom | `/` 本番、`/debug` デバッグ画面 |
+| 画像処理 | Canvas API（標準） | RGB→HSV変換 + UNO色相フィルタ（赤・青・緑・黄）+ 白枠隣接チェック（積分画像）による `none/single/multiple` 判定。依存なし。 |
+| 音声再生 | `<audio>` 要素 または Web Audio API | UNO判定時に音声ファイルを再生 |
+| BLE通信 | Web Bluetooth API | ブラウザ標準API（Chrome for Android必須）。スーパーUNOアピールモード専用。 |
 | デプロイ | Vercel | HTTPS自動付与・静的ホスティング |
 
 ## ESP32ファームウェア（`firmware/`）
@@ -26,3 +28,4 @@
 - Web Bluetooth API は **Chrome for Android** のみ対応（iOS Safari 非対応）
 - カメラAPI・Web Bluetooth API はいずれも **HTTPS必須**
 - 画像処理はすべてブラウザ内（端末内）で完結し、サーバー通信は行わない
+- 閾値（SAT_THRESHOLD 等）は実行環境（照明・カメラ特性）に依存するため `/debug` 画面でチューニングすること
