@@ -19,11 +19,10 @@ function CameraView({ mode, onBack }: CameraViewProps) {
   const { videoRef, status, errorMessage } = useCamera()
   const playAudio = useUnoAudio(mode)
 
-  const handleUno = useCallback(() => {
+  const { check, reset } = useUnoDetect(useCallback(() => {
     setUnoVisible(true)
     playAudio()
-  }, [playAudio])
-  const check = useUnoDetect(handleUno)
+  }, [playAudio]))
   const { onFrame } = useCardCount(check)
 
   useFrameCapture(videoRef, status === 'active', onFrame)
@@ -40,7 +39,7 @@ function CameraView({ mode, onBack }: CameraViewProps) {
       />
 
       {/* 手札ガイド枠 */}
-      {status === 'active' && <GuideFrame />}
+      {status === 'active' && !unoVisible && <GuideFrame />}
 
       {/* モードバッジ */}
       {status === 'active' && (
@@ -71,14 +70,14 @@ function CameraView({ mode, onBack }: CameraViewProps) {
         </div>
       )}
 
-      {/* UNO表示（タップで消去） — T11/T12 で演出を差し替え */}
-      {unoVisible && (
+      {/* UNO表示（タップで消去） */}
+      {unoVisible && mode === 'normal' && (
         <div
-          className="absolute inset-0 z-20 flex items-center justify-center cursor-pointer"
-          onClick={() => setUnoVisible(false)}
+          className="absolute inset-0 z-20 flex items-center justify-center cursor-pointer bg-black/50"
+          onClick={() => { setUnoVisible(false); reset() }}
         >
           <span
-            className="text-white font-black select-none"
+            className="text-white font-black select-none animate-uno-appear"
             style={{ fontSize: 'clamp(80px, 25vw, 180px)' }}
           >
             UNO
