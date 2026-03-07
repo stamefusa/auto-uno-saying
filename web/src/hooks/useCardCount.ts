@@ -1,18 +1,19 @@
 import { useState, useCallback } from 'react'
-import { detectCards, type CardState } from '../lib/cardCounter'
-import { drawDebugOverlay } from '../lib/cardCounter'
+import { detectCards, drawDebugOverlay, DEFAULT_PARAMS, type CardState, type CardDetectParams } from '../lib/cardCounter'
 
-export function useCardCount(debugCanvasRef?: React.RefObject<HTMLCanvasElement | null>) {
+export function useCardCount(
+  debugCanvasRef?: React.RefObject<HTMLCanvasElement | null>,
+  params: CardDetectParams = DEFAULT_PARAMS,
+) {
   const [cardState, setCardState] = useState<CardState>('none')
 
   const onFrame = useCallback((canvas: HTMLCanvasElement) => {
-    const { state } = detectCards(canvas)
+    const { state } = detectCards(canvas, params)
     setCardState(state)
-
     if (debugCanvasRef?.current) {
-      drawDebugOverlay(canvas, debugCanvasRef.current)
+      drawDebugOverlay(canvas, debugCanvasRef.current, params)
     }
-  }, [debugCanvasRef])
+  }, [debugCanvasRef, params])
 
   return { cardState, onFrame }
 }
