@@ -8,6 +8,19 @@ import { GuideFrame } from '../components/GuideFrame'
 import { ModeSelect } from '../components/ModeSelect'
 import type { UnoMode } from '../types/mode'
 
+// シード付き疑似乱数（再レンダリングで値が変わらないよう定数として生成）
+function seededRand(seed: number) {
+  const x = Math.sin(seed + 1) * 10000
+  return x - Math.floor(x)
+}
+
+const FLOW_ITEMS = Array.from({ length: 50 }, (_, i) => ({
+  top:      `${seededRand(i * 3 + 0) * 95}%`,
+  size:     Math.floor(seededRand(i * 3 + 1) * 18) + 14,   // 14–32px
+  duration: seededRand(i * 3 + 2) * 2.0 + 2.3,             // 2.3–4.3s
+  delay:    -(seededRand(i * 3 + 0) * 4.3),                 // -0 〜 -4.3s（最初から流れている）
+}))
+
 interface CameraViewProps {
   mode: UnoMode
   onBack: () => void
@@ -70,7 +83,7 @@ function CameraView({ mode, onBack }: CameraViewProps) {
         </div>
       )}
 
-      {/* UNO表示（タップで消去） */}
+      {/* UNO表示（タップで消去） — 通常モード */}
       {unoVisible && mode === 'normal' && (
         <div
           className="absolute inset-0 z-20 flex items-center justify-center cursor-pointer bg-black/50"
@@ -79,6 +92,37 @@ function CameraView({ mode, onBack }: CameraViewProps) {
           <span
             className="text-white font-black select-none animate-uno-appear"
             style={{ fontSize: 'clamp(80px, 25vw, 180px)' }}
+          >
+            UNO
+          </span>
+        </div>
+      )}
+
+      {/* UNO表示（タップで消去） — スーパーモード */}
+      {unoVisible && mode === 'super' && (
+        <div
+          className="absolute inset-0 z-20 flex items-center justify-center cursor-pointer animate-uno-super-bg overflow-hidden"
+          onClick={() => { setUnoVisible(false); reset() }}
+        >
+          {/* ニコニコ風に右から左へ流れるUNO */}
+          {FLOW_ITEMS.map(({ top, size, duration, delay }, i) => (
+            <span
+              key={i}
+              className="absolute left-0 text-yellow-300 font-black select-none whitespace-nowrap animate-uno-flow opacity-70"
+              style={{
+                top,
+                fontSize: `${size}px`,
+                animationDuration: `${duration}s`,
+                animationDelay: `${delay}s`,
+              }}
+            >
+              UNO
+            </span>
+          ))}
+          {/* メインUNO（スタンプ） */}
+          <span
+            className="relative text-white font-black select-none animate-uno-super-stamp drop-shadow-[0_0_24px_rgba(255,220,0,0.8)]"
+            style={{ fontSize: 'min(38vw, 80vh)' }}
           >
             UNO
           </span>

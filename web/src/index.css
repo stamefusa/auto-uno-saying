@@ -14,3 +14,36 @@
 .animate-uno-appear {
   animation: uno-appear 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
+
+@keyframes uno-super-stamp {
+  0%   { transform: scale(4); opacity: 0; }
+  55%  { transform: scale(0.88); opacity: 1; }
+  72%  { transform: scale(1.06); }
+  86%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+@keyframes uno-flow {
+  from { transform: translateX(110vw); }
+  to   { transform: translateX(-110vw); }
+}
+
+.animate-uno-super-stamp {
+  animation: uno-super-stamp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-uno-flow {
+  animation: uno-flow linear infinite;
+}
+
+@keyframes uno-super-bg-shift {
+  0%   { background-color: #38bdf8; } /* sky-400    */
+  25%  { background-color: #818cf8; } /* indigo-400 */
+  50%  { background-color: #34d399; } /* emerald-400*/
+  75%  { background-color: #fb923c; } /* orange-400 */
+  100% { background-color: #38bdf8; }
+}
+
+.animate-uno-super-bg {
+  animation: uno-super-bg-shift 4s ease-in-out infinite;
+}
