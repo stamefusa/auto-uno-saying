@@ -31,8 +31,14 @@ export function DebugPage() {
     multiple: '複数枚',
   }
 
+  const stateBorder: Record<typeof cardState, string> = {
+    none:     'border-blue-500',
+    single:   'border-red-500',
+    multiple: 'border-green-500',
+  }
+
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
+    <div className={`relative min-h-screen bg-black text-white overflow-hidden border-8 ${status === 'active' ? stateBorder[cardState] : 'border-transparent'}`}>
       {/* カメラプレビュー（本番と同じ全画面） */}
       <video
         ref={videoRef}

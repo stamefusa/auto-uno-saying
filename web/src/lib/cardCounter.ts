@@ -194,7 +194,7 @@ export function drawDebugOverlay(
   }
   ctx.putImageData(imgData, 0, 0)
 
-  const barH = 16, barY = height - barH
+  const barH = 16, barY = 0
   ctx.fillStyle = 'rgba(0,0,0,0.6)'
   ctx.fillRect(0, barY, width, barH)
 
@@ -206,12 +206,12 @@ export function drawDebugOverlay(
   ctx.strokeStyle = '#facc15'
   ctx.beginPath()
   ctx.moveTo(Math.round(ratioSingle * width), barY)
-  ctx.lineTo(Math.round(ratioSingle * width), height)
+  ctx.lineTo(Math.round(ratioSingle * width), barY + barH)
   ctx.stroke()
   ctx.strokeStyle = '#aaa'
   ctx.beginPath()
   ctx.moveTo(Math.round(ratioNone * width), barY)
-  ctx.lineTo(Math.round(ratioNone * width), height)
+  ctx.lineTo(Math.round(ratioNone * width), barY + barH)
   ctx.stroke()
   ctx.setLineDash([])
 

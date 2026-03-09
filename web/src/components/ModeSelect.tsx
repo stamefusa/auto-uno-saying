@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import type { UnoMode } from '../types/mode'
 
 interface Props {
@@ -5,6 +6,8 @@ interface Props {
 }
 
 export function ModeSelect({ onSelect }: Props) {
+  const navigate = useNavigate()
+
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-8 px-6">
       <h1 className="text-white text-3xl font-black tracking-widest">UNO</h1>
@@ -29,6 +32,14 @@ export function ModeSelect({ onSelect }: Props) {
           <span className="text-xs text-black/60">激しい演出 + ESP32連携</span>
         </button>
       </div>
+
+      {/* デバッグモードへの遷移 */}
+      <button
+        onClick={() => navigate('/debug')}
+        className="text-xs text-gray-600 underline mt-4"
+      >
+        デバッグモード
+      </button>
     </div>
   )
 }
