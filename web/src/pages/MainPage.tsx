@@ -4,6 +4,7 @@ import { useFrameCapture } from '../hooks/useFrameCapture'
 import { useCardCount } from '../hooks/useCardCount'
 import { useUnoDetect } from '../hooks/useUnoDetect'
 import { useUnoAudio } from '../hooks/useUnoAudio'
+import { usePersistedParams } from '../hooks/usePersistedParams'
 import { GuideFrame } from '../components/GuideFrame'
 import { ModeSelect } from '../components/ModeSelect'
 import type { UnoMode } from '../types/mode'
@@ -36,7 +37,8 @@ function CameraView({ mode, onBack }: CameraViewProps) {
     setUnoVisible(true)
     playAudio()
   }, [playAudio]))
-  const { onFrame } = useCardCount(check)
+  const [params] = usePersistedParams()
+  const { onFrame } = useCardCount(check, undefined, params)
 
   useFrameCapture(videoRef, status === 'active', onFrame)
 
