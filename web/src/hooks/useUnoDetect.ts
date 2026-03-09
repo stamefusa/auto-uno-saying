@@ -2,7 +2,7 @@ import { useRef, useCallback } from 'react'
 import type { CardState } from '../lib/cardCounter'
 
 // multiple → single の遷移後、この連続フレーム数だけ single が続いたら UNO と判定
-const REQUIRED_CONSECUTIVE_FRAMES = 3
+const REQUIRED_CONSECUTIVE_FRAMES = 10
 
 /**
  * UNO判定ロジック
