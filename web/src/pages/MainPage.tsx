@@ -5,6 +5,7 @@ import { useCardCount } from '../hooks/useCardCount'
 import { useUnoDetect } from '../hooks/useUnoDetect'
 import { useUnoAudio } from '../hooks/useUnoAudio'
 import { usePersistedParams } from '../hooks/usePersistedParams'
+import { useBle } from '../hooks/useBle'
 import { GuideFrame } from '../components/GuideFrame'
 import { ModeSelect } from '../components/ModeSelect'
 import type { UnoMode } from '../types/mode'
@@ -27,16 +28,30 @@ interface CameraViewProps {
   onBack: () => void
 }
 
+const BLE_STATUS_LABEL: Record<string, string> = {
+  disconnected: 'BLE未接続',
+  connecting:   '接続中...',
+  connected:    'BLE接続済',
+}
+
+const BLE_STATUS_CLASS: Record<string, string> = {
+  disconnected: 'bg-white/20 text-white',
+  connecting:   'bg-yellow-400 text-black',
+  connected:    'bg-green-400 text-black',
+}
+
 function CameraView({ mode, onBack }: CameraViewProps) {
   const [unoVisible, setUnoVisible] = useState(false)
 
   const { videoRef, status, errorMessage } = useCamera()
   const playAudio = useUnoAudio(mode)
+  const { status: bleStatus, connect, sendUno } = useBle()
 
   const { check, reset } = useUnoDetect(useCallback(() => {
     setUnoVisible(true)
     playAudio()
-  }, [playAudio]))
+    if (mode === 'super') sendUno()
+  }, [playAudio, mode, sendUno]))
   const [params] = usePersistedParams()
   const { onFrame } = useCardCount(check, undefined, params)
 
@@ -56,11 +71,23 @@ function CameraView({ mode, onBack }: CameraViewProps) {
       {/* 手札ガイド枠 */}
       {status === 'active' && !unoVisible && <GuideFrame />}
 
-      {/* モードバッジ */}
+      {/* モードバッジ・BLEボタン */}
       {status === 'active' && (
-        <div className="absolute top-3 right-3 z-10">
+        <div className="absolute top-3 left-0 right-0 z-10 flex justify-between px-3">
+          {/* BLE接続ボタン（スーパーモードのみ） */}
+          {mode === 'super' ? (
+            <button
+              onClick={connect}
+              disabled={bleStatus === 'connecting' || bleStatus === 'connected'}
+              className={`text-xs font-bold px-2 py-0.5 rounded ${BLE_STATUS_CLASS[bleStatus]}`}
+            >
+              {BLE_STATUS_LABEL[bleStatus]}
+            </button>
+          ) : (
+            <div />
+          )}
           <button
-            onClick={() => { onBack(); }}
+            onClick={onBack}
             className={`text-xs font-bold px-2 py-0.5 rounded ${
               mode === 'super' ? 'bg-yellow-400 text-black' : 'bg-white/20 text-white'
             }`}
