@@ -20,5 +20,5 @@
 // ============================================================
 #define SERVO_PIN          22   // M5Atom Lite Grove端子 (G22)
 #define SERVO_ANGLE_OPEN   60   // 旗展開角度 [°]
-#define SERVO_ANGLE_CLOSE  0    // 旗収納角度 [°]
+#define SERVO_ANGLE_CLOSE  160    // 旗収納角度 [°]
 #define SERVO_RETURN_MS    2000  // 展開 → 収納までの待機時間 [ms]
