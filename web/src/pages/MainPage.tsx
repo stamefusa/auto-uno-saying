@@ -119,7 +119,7 @@ function CameraView({ mode, onBack }: CameraViewProps) {
           onClick={() => { setUnoVisible(false); reset() }}
         >
           <span
-            className="text-white font-black select-none animate-uno-appear"
+            className="text-white font-black select-none animate-uno-appear rotate-180"
             style={{ fontSize: 'clamp(80px, 25vw, 180px)' }}
           >
             UNO
@@ -130,7 +130,7 @@ function CameraView({ mode, onBack }: CameraViewProps) {
       {/* UNO表示（タップで消去） — スーパーモード */}
       {unoVisible && mode === 'super' && (
         <div
-          className="absolute inset-0 z-20 flex items-center justify-center cursor-pointer animate-uno-super-bg overflow-hidden"
+          className="absolute inset-0 z-20 flex items-center justify-center cursor-pointer animate-uno-super-bg overflow-hidden rotate-180"
           onClick={() => { setUnoVisible(false); reset() }}
         >
           {/* ニコニコ風に右から左へ流れるUNO */}
